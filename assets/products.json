@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Classic Tee",
+    "description": "A comfortable cotton t-shirt with a relaxed fit.",
+    "price": 24.99,
+    "category": "Clothing",
+    "image": "https://via.placeholder.com/160?text=Classic+Tee"
+  },
+  {
+    "id": 2,
+    "name": "Denim Jacket",
+    "description": "A stylish denim jacket for any season.",
+    "price": 69.99,
+    "category": "Clothing",
+    "image": "https://via.placeholder.com/160?text=Denim+Jacket"
+  },
+  {
+    "id": 3,
+    "name": "Retro Sneakers",
+    "description": "Comfortable sneakers for daily wear.",
+    "price": 89.99,
+    "category": "Shoes",
+    "image": "https://via.placeholder.com/160?text=Retro+Sneakers"
+  },
+  {
+    "id": 4,
+    "name": "Leather Wallet",
+    "description": "Minimal leather wallet with three card slots.",
+    "price": 34.99,
+    "category": "Accessories",
+    "image": "https://via.placeholder.com/160?text=Leather+Wallet"
+  },
+  {
+    "id": 5,
+    "name": "Bluetooth Speaker",
+    "description": "Portable speaker with rich bass and 12h battery.",
+    "price": 49.99,
+    "category": "Electronics",
+    "image": "https://via.placeholder.com/160?text=Bluetooth+Speaker"
+  }
+]
