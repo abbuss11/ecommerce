@@ -89,7 +89,16 @@ class CatalogScreen extends ConsumerWidget {
 
                 return favoritesAsync.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (error, stack) => Center(child: Text('Favorites failed: $error')),
+                  error: (error, stack) => Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.error_outline, size: 32),
+                        const SizedBox(height: 8),
+                        Text('Favorites could not be loaded: $error'),
+                      ],
+                    ),
+                  ),
                   data: (favoriteIds) {
                     return ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -153,6 +162,14 @@ class _ProductCard extends StatelessWidget {
                   width: 92,
                   height: 92,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 92,
+                      height: 92,
+                      color: Colors.grey.shade200,
+                      child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 12),
@@ -170,17 +187,22 @@ class _ProductCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Column(
-                children: [
-                  IconButton(
-                    icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.redAccent),
-                    onPressed: onFavoriteToggle,
-                  ),
-                  ElevatedButton(
-                    onPressed: onAddCart,
-                    child: const Text('Add'),
-                  ),
-                ],
+              const SizedBox(width: 12),
+              ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 88),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.redAccent),
+                      onPressed: onFavoriteToggle,
+                    ),
+                    ElevatedButton(
+                      onPressed: onAddCart,
+                      child: const Text('Add'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

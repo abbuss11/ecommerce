@@ -22,7 +22,10 @@ class ProductDetailScreen extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Center(child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))),
             ),
-            error: (error, stack) => const SizedBox.shrink(),
+            error: (error, stack) => const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Icon(Icons.error_outline),
+            ),
             data: (favoriteIds) {
               final isFavorite = favoriteIds.contains(product.id);
               return IconButton(
@@ -40,7 +43,18 @@ class ProductDetailScreen extends ConsumerWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(product.image, height: 260, fit: BoxFit.cover),
+              child: Image.network(
+                product.image,
+                height: 260,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 260,
+                    color: Colors.grey.shade200,
+                    child: const Center(child: Icon(Icons.image_not_supported, size: 48, color: Colors.grey)),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 16),
             Text(product.name, style: Theme.of(context).textTheme.headlineSmall),

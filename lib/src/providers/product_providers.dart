@@ -5,10 +5,12 @@ import '../models/cart_item.dart';
 import '../models/product.dart';
 import '../repositories/product_repository.dart';
 
+/// Provides the repository used by the catalog and detail screens.
 final productRepositoryProvider = Provider<ProductRepository>((_) {
   return ProductRepository();
 });
 
+/// Loads the mock products from the repository.
 final productsProvider = FutureProvider<List<Product>>((ref) async {
   final repository = ref.watch(productRepositoryProvider);
   return repository.loadProducts();
@@ -51,6 +53,7 @@ final filteredProductsProvider = Provider<AsyncValue<List<Product>>>((ref) {
   });
 });
 
+/// Maintains the current shopping cart state.
 class CartNotifier extends StateNotifier<Map<int, CartItem>> {
   CartNotifier() : super({});
 
@@ -88,6 +91,7 @@ final cartProvider = StateNotifierProvider<CartNotifier, Map<int, CartItem>>((_)
   return CartNotifier();
 });
 
+/// Persists and exposes the set of favorite product ids.
 class FavoritesNotifier extends AsyncNotifier<Set<int>> {
   static const _prefsKey = 'favoriteProductIds';
 

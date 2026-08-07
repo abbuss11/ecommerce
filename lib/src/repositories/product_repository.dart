@@ -4,6 +4,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/product.dart';
 
+/// Loads the mock catalog used by the shop screens.
 class ProductRepository {
   Future<List<Product>> loadProducts() async {
     final jsonString = await rootBundle.loadString('assets/products.json');
