@@ -28,30 +28,48 @@ final filteredProductsProvider = Provider<AsyncValue<List<Product>>>((ref) {
   final sortOrder = ref.watch(sortOrderProvider);
   final searchQuery = ref.watch(searchQueryProvider).toLowerCase();
 
-  return productsAsync.whenData((products) {
-    var filtered = products;
-    if (category != null && category.isNotEmpty) {
-      filtered = filtered.where((product) => product.category == category).toList();
-    }
-    if (searchQuery.isNotEmpty) {
-      filtered = filtered.where((product) {
-        return product.name.toLowerCase().contains(searchQuery) ||
-            product.description.toLowerCase().contains(searchQuery);
-      }).toList();
-    }
-    switch (sortOrder) {
-      case SortOrder.priceAsc:
-        filtered.sort((a, b) => a.price.compareTo(b.price));
-        break;
-      case SortOrder.priceDesc:
-        filtered.sort((a, b) => b.price.compareTo(a.price));
-        break;
-      case SortOrder.none:
-        break;
-    }
-    return filtered;
-  });
+  return productsAsync.when(
+    data: (products) {
+      return AsyncValue.data(_applyProductFilters(
+        products: products,
+        category: category,
+        sortOrder: sortOrder,
+        searchQuery: searchQuery,
+      ));
+    },
+    loading: () => const AsyncValue.loading(),
+    error: (error, stack) => AsyncValue.error(error, stack),
+  );
 });
+
+List<Product> _applyProductFilters({
+  required List<Product> products,
+  required String? category,
+  required SortOrder sortOrder,
+  required String searchQuery,
+}) {
+  var filtered = products;
+  if (category != null && category.isNotEmpty) {
+    filtered = filtered.where((product) => product.category == category).toList();
+  }
+  if (searchQuery.isNotEmpty) {
+    filtered = filtered.where((product) {
+      return product.name.toLowerCase().contains(searchQuery) ||
+          product.description.toLowerCase().contains(searchQuery);
+    }).toList();
+  }
+  switch (sortOrder) {
+    case SortOrder.priceAsc:
+      filtered.sort((a, b) => a.price.compareTo(b.price));
+      break;
+    case SortOrder.priceDesc:
+      filtered.sort((a, b) => b.price.compareTo(a.price));
+      break;
+    case SortOrder.none:
+      break;
+  }
+  return filtered;
+}
 
 /// Maintains the current shopping cart state.
 class CartNotifier extends StateNotifier<Map<int, CartItem>> {
@@ -91,6 +109,14 @@ final cartProvider = StateNotifierProvider<CartNotifier, Map<int, CartItem>>((_)
   return CartNotifier();
 });
 
+final cartItemCountProvider = Provider<int>((ref) {
+  return ref.watch(cartProvider).values.fold(0, (count, item) => count + item.quantity);
+});
+
+final cartTotalProvider = Provider<double>((ref) {
+  return ref.watch(cartProvider).values.fold(0.0, (sum, item) => sum + item.product.price * item.quantity);
+});
+
 /// Persists and exposes the set of favorite product ids.
 class FavoritesNotifier extends AsyncNotifier<Set<int>> {
   static const _prefsKey = 'favoriteProductIds';
@@ -110,12 +136,24 @@ class FavoritesNotifier extends AsyncNotifier<Set<int>> {
     } else {
       next.add(productId);
     }
-    state = AsyncValue.data(next);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(_prefsKey, next.map((id) => id.toString()).toList());
+
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList(_prefsKey, next.map((id) => id.toString()).toList());
+      return next;
+    });
   }
 }
 
 final favoritesProvider = AsyncNotifierProvider<FavoritesNotifier, Set<int>>(() {
   return FavoritesNotifier();
+});
+
+final favoriteCountProvider = Provider<int>((ref) {
+  return ref.watch(favoritesProvider).when(
+        data: (favorites) => favorites.length,
+        loading: () => 0,
+        error: (_, __) => 0,
+      );
 });
