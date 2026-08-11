@@ -18,7 +18,13 @@ void main() {
     addTearDown(container.dispose);
 
     container.read(sortOrderProvider.notifier).state = SortOrder.priceAsc;
-    final products = await container.read(filteredProductsProvider.future);
+    await container.read(productsProvider.future);
+    final filteredAsync = container.read(filteredProductsProvider);
+    final products = await filteredAsync.when(
+      data: (data) async => data,
+      loading: () async => [],
+      error: (error, stack) async => [],
+    );
 
     expect(products, isNotEmpty);
     final prices = products.map((product) => product.price).toList();
