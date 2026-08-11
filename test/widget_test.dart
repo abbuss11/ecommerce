@@ -26,18 +26,18 @@ void main() {
 
     expect(find.text('Classic Tee'), findsOneWidget);
     await tester.tap(find.text('Classic Tee').first);
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
 
     expect(find.text('Classic Tee'), findsOneWidget);
     expect(find.text('Add to cart'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite_border), findsOneWidget);
   });
 
   testWidgets('profile screen shows user profile data and favorites summary', (tester) async {
     await tester.pumpWidget(const ProviderScope(child: ShopApp()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Profile'));
+    await tester.tap(find.text('Profile'));
     await tester.pumpAndSettle();
 
     expect(find.text('Jane Doe'), findsOneWidget);

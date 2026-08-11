@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:project3/src/models/product.dart';
 import 'package:project3/src/providers/product_providers.dart';
 import 'package:project3/src/providers/user_provider.dart';
-import 'package:project3/src/repositories/product_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
