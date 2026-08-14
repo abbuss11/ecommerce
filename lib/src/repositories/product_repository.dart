@@ -11,7 +11,7 @@ class ProductRepository {
       final jsonString = await rootBundle.loadString('assets/products.json');
       final decoded = json.decode(jsonString) as List<dynamic>;
       return decoded.map((entry) => Product.fromJson(entry as Map<String, dynamic>)).toList();
-    } catch (error, stackTrace) {
+    } catch (error) {
       throw Exception('Unable to load product catalog: $error');
     }
   }

@@ -83,14 +83,3 @@ Toutes contributions sont bienvenues : bug reports, corrections de traduction, t
 2. Faire une branche, ajouter des tests si pertinent
 3. Ouvrir une pull request
 
-## Contact
-Pour toute question, laisse un message dans les issues du dépôt.
-
----
-
-Si tu veux, je peux aussi :
-- corriger les fautes et la syntaxe dans le code Dart (analyse statique)
-- exécuter la suite de tests et corriger les échecs
-- rechercher et corriger des bugs fréquents (null-safety, erreurs asynchrones, exceptions JSON)
-
-Dis‑moi quelle(s) action(s) tu souhaites que j'exécute en priorité.
