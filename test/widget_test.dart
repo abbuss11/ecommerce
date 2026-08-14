@@ -27,7 +27,8 @@ void main() {
     expect(find.text('Classic Tee'), findsOneWidget);
     await tester.tap(find.text('Classic Tee').first);
     await tester.pump();
-    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Classic Tee'), findsOneWidget);
     expect(find.text('Add to cart'), findsOneWidget);
@@ -38,7 +39,9 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Profile'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Jane Doe'), findsOneWidget);
     expect(find.text('jane.doe@example.com'), findsOneWidget);
